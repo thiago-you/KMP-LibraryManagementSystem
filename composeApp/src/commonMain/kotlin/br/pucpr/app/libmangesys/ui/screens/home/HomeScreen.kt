@@ -23,10 +23,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.pucpr.app.libmangesys.enums.NavigationEnum
+import br.pucpr.app.libmangesys.ui.screens.books.BooksScreen
+import br.pucpr.app.libmangesys.ui.screens.borrows.BorrowsScreen
+import br.pucpr.app.libmangesys.ui.screens.users.UsersScreen
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+data class HomeScreen(private val intent: HomeIntent) : Screen {
+    @Composable
+    override fun Content() {
+        HomeScreenContent(intent)
+    }
+}
+
+@Preview
 @Composable
-fun HomeScreen() {
+fun HomeScreenPreview() {
+    MaterialTheme {
+        HomeScreenContent(HomeIntent())
+    }
+}
+
+@Composable
+fun HomeScreenContent(intent: HomeIntent) {
+    val navigator = LocalNavigator.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -43,7 +67,7 @@ fun HomeScreen() {
             Text(
                 modifier = Modifier.padding(bottom = 32.dp)
                     .padding(horizontal = 16.dp),
-                text = "Teste",
+                text = intent.getTitleText(),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -59,14 +83,14 @@ fun HomeScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                ButtonComponent(text = "Users") {
-                    navigate()
+                ButtonComponent(text = intent.getBtnUsersText()) {
+                    navigate(navigator, intent.onBtnUsersClick())
                 }
-                ButtonComponent(text = "Books") {
-                    navigate()
+                ButtonComponent(text = intent.getBtnBooksText()) {
+                    navigate(navigator, intent.onBtnBooksClick())
                 }
-                ButtonComponent(text = "Borrows") {
-                    navigate()
+                ButtonComponent(text = intent.getBtnBorrowsText()) {
+                    navigate(navigator, intent.onBtnBorrowsClick())
                 }
             }
         }
@@ -92,14 +116,10 @@ fun ButtonComponent(text: String, onClick: () -> Unit) {
     }
 }
 
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    MaterialTheme {
-        HomeScreen()
+private fun navigate(navigator: Navigator?, destination: NavigationEnum) {
+    when (destination) {
+        NavigationEnum.USERS -> navigator?.push(UsersScreen())
+        NavigationEnum.BOOKS -> navigator?.push(BooksScreen())
+        NavigationEnum.BORROWS -> navigator?.push(BorrowsScreen())
     }
-}
-
-private fun navigate() {
-
 }
