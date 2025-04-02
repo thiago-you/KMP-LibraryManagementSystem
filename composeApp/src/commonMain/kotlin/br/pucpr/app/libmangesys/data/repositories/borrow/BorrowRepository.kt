@@ -3,65 +3,14 @@ package br.pucpr.app.libmangesys.data.repositories.borrow
 import br.pucpr.app.libmangesys.data.models.Borrow
 import br.pucpr.app.libmangesys.data.models.BorrowWithDetails
 
-class BorrowRepository constructor(
-    private var database: BorrowDao
-): BorrowInterface {
-    override suspend fun truncate() {
-        database.truncate()
-    }
-
-    override suspend fun getList(): List<Borrow> = database.getAll()
-
-    override suspend fun find(itemId: Int?): Borrow? = database.findById(itemId)
-
-    override suspend fun insert(item: Borrow) {
-        if ((item.bookId ?: 0) <= 0) {
-            return
-        }
-        if ((item.userId ?: 0) <= 0) {
-            return
-        }
-
-        database.insert(item)
-    }
-
-    override suspend fun update(item: Borrow) {
-        if (item.id == null) {
-            return
-        }
-        if ((item.bookId ?: 0) <= 0) {
-            return
-        }
-        if ((item.userId ?: 0) <= 0) {
-            return
-        }
-
-        database.update(item)
-    }
-
-    override suspend fun delete(itemId: Int?) {
-        if (itemId == null) {
-            return
-        }
-
-        database.deleteById(itemId)
-    }
-
-    override suspend fun hasBorrowsFromBook(bookId: Int?): Boolean {
-        if ((bookId ?: 0) <= 0) {
-            return false
-        }
-
-        return database.getBorrowsFromBook(bookId).isNotEmpty()
-    }
-
-    override suspend fun hasBorrowsFromUser(userId: Int?): Boolean {
-        if ((userId ?: 0) <= 0) {
-            return false
-        }
-
-        return database.getBorrowsFromUser(userId).isNotEmpty()
-    }
-
-    override suspend fun getListWithDetails(): List<BorrowWithDetails> = database.getAllBorrowsWithDetails()
+interface BorrowRepository {
+    suspend fun truncate()
+    suspend fun getList(): List<Borrow>
+    suspend fun getListWithDetails(): List<BorrowWithDetails>
+    suspend fun insert(item: Borrow)
+    suspend fun update(item: Borrow)
+    suspend fun delete(itemId: Int?)
+    suspend fun find(itemId: Int?): Borrow?
+    suspend fun hasBorrowsFromUser(userId: Int?): Boolean
+    suspend fun hasBorrowsFromBook(bookId: Int?): Boolean
 }

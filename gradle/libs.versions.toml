@@ -19,6 +19,7 @@ voyager = "1.1.0-beta03"
 room = "2.7.0-rc03"
 sqlite = "2.5.0-rc03"
 ksp = "2.1.20-1.0.32"
+koin-bom = "4.0.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -48,6 +49,11 @@ room-gradle = { module = "androidx.room:room-gradle-plugin", version.ref = "room
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-sqlite = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-core = { module = "io.insert-koin:koin-core"}
+koin-android = { module = "io.insert-koin:koin-android"}
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
