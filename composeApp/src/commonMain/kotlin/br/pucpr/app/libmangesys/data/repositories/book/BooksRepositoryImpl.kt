@@ -1,13 +1,13 @@
 package br.pucpr.app.libmangesys.data.repositories.book
 
 import br.pucpr.app.libmangesys.data.models.Book
-import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowRepository
+import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowsRepository
 import kotlin.random.Random
 
-class BookRepositoryImpl(
+class BooksRepositoryImpl(
     private var database: BookDao,
-    private var borrowRepository: BorrowRepository
-): BookRepository {
+    private var borrowsRepository: BorrowsRepository
+): BooksRepository {
 
     private val mockTitles = listOf(
         "The Great Gatsby",
@@ -61,7 +61,7 @@ class BookRepositoryImpl(
         if (bookId == null) {
             return false
         }
-        if (borrowRepository.hasBorrowsFromBook(bookId)) {
+        if (borrowsRepository.hasBorrowsFromBook(bookId)) {
             return false
         }
 

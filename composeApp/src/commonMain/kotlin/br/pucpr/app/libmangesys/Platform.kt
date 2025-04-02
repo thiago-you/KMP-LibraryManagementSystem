@@ -1,15 +1,15 @@
 package br.pucpr.app.libmangesys
 
-import br.pucpr.app.libmangesys.data.repositories.book.BookRepository
-import br.pucpr.app.libmangesys.data.repositories.book.BookRepositoryImpl
-import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowRepository
-import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowRepositoryImpl
+import br.pucpr.app.libmangesys.data.repositories.book.BooksRepository
+import br.pucpr.app.libmangesys.data.repositories.book.BooksRepositoryImpl
+import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowsRepository
+import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowsRepositoryImpl
 import br.pucpr.app.libmangesys.data.repositories.getBookDao
 import br.pucpr.app.libmangesys.data.repositories.getBorrowDao
 import br.pucpr.app.libmangesys.data.repositories.getRoomDatabase
 import br.pucpr.app.libmangesys.data.repositories.getUserDao
-import br.pucpr.app.libmangesys.data.repositories.user.UserRepository
-import br.pucpr.app.libmangesys.data.repositories.user.UserRepositoryImpl
+import br.pucpr.app.libmangesys.data.repositories.user.UsersRepository
+import br.pucpr.app.libmangesys.data.repositories.user.UsersRepositoryImpl
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -36,9 +36,9 @@ fun initKoin(config: KoinAppDeclaration? = null) =
     }
 
 val provideRepositoryModule = module {
-    singleOf(::BookRepositoryImpl).bind(BookRepository::class)
-    singleOf(::UserRepositoryImpl).bind(UserRepository::class)
-    singleOf(::BorrowRepositoryImpl).bind(BorrowRepository::class)
+    singleOf(::BooksRepositoryImpl).bind(BooksRepository::class)
+    singleOf(::UsersRepositoryImpl).bind(UsersRepository::class)
+    singleOf(::BorrowsRepositoryImpl).bind(BorrowsRepository::class)
 }
 
 val provideDatabaseModule = module {

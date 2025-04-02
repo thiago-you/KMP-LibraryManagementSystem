@@ -3,9 +3,9 @@ package br.pucpr.app.libmangesys.data.repositories.borrow
 import br.pucpr.app.libmangesys.data.models.Borrow
 import br.pucpr.app.libmangesys.data.models.BorrowWithDetails
 
-class BorrowRepositoryImpl(
+class BorrowsRepositoryImpl(
     private var database: BorrowDao
-): BorrowRepository {
+): BorrowsRepository {
     override suspend fun truncate() {
         database.truncate()
     }

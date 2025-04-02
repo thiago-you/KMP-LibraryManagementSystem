@@ -1,12 +1,12 @@
 package br.pucpr.app.libmangesys.data.repositories.user
 
 import br.pucpr.app.libmangesys.data.models.User
-import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowRepository
+import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowsRepository
 
-class UserRepositoryImpl(
+class UsersRepositoryImpl(
     private var database: UserDao,
-    private var borrowRepository: BorrowRepository
-): UserRepository {
+    private var borrowsRepository: BorrowsRepository
+): UsersRepository {
     override suspend fun truncate() {
         database.truncate()
     }
@@ -35,7 +35,7 @@ class UserRepositoryImpl(
         if (userId == null) {
             return false
         }
-        if (borrowRepository.hasBorrowsFromUser(userId)) {
+        if (borrowsRepository.hasBorrowsFromUser(userId)) {
             return false
         }
 

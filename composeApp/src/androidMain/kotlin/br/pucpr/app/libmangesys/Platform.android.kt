@@ -6,6 +6,7 @@ import br.pucpr.app.libmangesys.data.repositories.AppDatabase
 import br.pucpr.app.libmangesys.database.getDatabaseBuilder
 import org.koin.dsl.module
 import org.koin.core.module.dsl.viewModelOf
+import br.pucpr.app.libmangesys.ui.screens.books.BooksViewModel
 
 class AndroidPlatform : Platform {
     override val name: String = "Android ${Build.VERSION.SDK_INT}"
@@ -19,4 +20,6 @@ actual fun platformModule() = module {
     }
 }
 
-val appModule = module {}
+val appModule = module {
+    viewModelOf(::BooksViewModel)
+}

@@ -30,7 +30,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-class BooksScreen : Screen {
+class BooksScreen(viewModel: BooksViewModel = koinViewModel()) : Screen {
     @Composable
     override fun Content() {
         BooksScreenContent()

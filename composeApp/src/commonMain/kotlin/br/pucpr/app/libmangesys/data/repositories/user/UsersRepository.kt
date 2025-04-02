@@ -2,7 +2,7 @@ package br.pucpr.app.libmangesys.data.repositories.user
 
 import br.pucpr.app.libmangesys.data.models.User
 
-interface UserRepository {
+interface UsersRepository {
     suspend fun truncate()
     suspend fun getList(): List<User>
     suspend fun insert(user: User)

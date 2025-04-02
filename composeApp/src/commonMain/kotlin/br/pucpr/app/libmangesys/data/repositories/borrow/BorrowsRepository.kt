@@ -3,7 +3,7 @@ package br.pucpr.app.libmangesys.data.repositories.borrow
 import br.pucpr.app.libmangesys.data.models.Borrow
 import br.pucpr.app.libmangesys.data.models.BorrowWithDetails
 
-interface BorrowRepository {
+interface BorrowsRepository {
     suspend fun truncate()
     suspend fun getList(): List<Borrow>
     suspend fun getListWithDetails(): List<BorrowWithDetails>
