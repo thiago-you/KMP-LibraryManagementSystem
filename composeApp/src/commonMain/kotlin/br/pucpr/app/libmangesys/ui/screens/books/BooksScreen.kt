@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,8 +31,9 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 
-class BooksScreen(viewModel: BooksViewModel = koinViewModel()) : Screen {
+class BooksScreen : Screen {
     @Composable
     override fun Content() {
         BooksScreenContent()
@@ -47,7 +50,7 @@ fun BooksScreenPreview() {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun BooksScreenContent() {
+fun BooksScreenContent(viewModel: BooksViewModel = koinInject<BooksViewModel>()) {
     val navigator = LocalNavigator.current
 
     Scaffold(
@@ -94,6 +97,19 @@ fun BooksScreenContent() {
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
+
+                LazyColumn {
+//                    items(viewModel.getBooks().collectAsState(initial = emptyList()).value) { book ->
+//                        Text(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .padding(16.dp),
+//                            text = book.title.toString(),
+//                            fontSize = 18.sp,
+//                            color = Color.White
+//                        )
+//                    }
+                }
             }
         }
     }

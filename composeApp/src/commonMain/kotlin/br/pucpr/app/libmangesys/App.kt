@@ -6,11 +6,23 @@ import br.pucpr.app.libmangesys.ui.screens.home.HomeIntent
 import br.pucpr.app.libmangesys.ui.screens.home.HomeScreen
 import cafe.adriel.voyager.navigator.Navigator
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.KoinContext
 
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
-        Navigator(HomeScreen(HomeIntent()))
+        KoinContext {
+            Navigator(HomeScreen(HomeIntent()))
+        }
     }
 }
+
+//@Composable
+//inline fun <reified T: ViewModel> koinViewModel(): T {
+//    val scope = currentKoinScope()
+//
+//    return viewModelFactory {
+//        scope.get<T>()
+//    }
+//}
