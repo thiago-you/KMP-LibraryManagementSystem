@@ -4,12 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,15 +30,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.pucpr.app.libmangesys.data.models.Book
 import br.pucpr.app.libmangesys.koinViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import coil3.compose.AsyncImage
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.koinInject
 
 class BooksScreen : Screen {
     @Composable
@@ -76,47 +84,87 @@ fun BooksScreenContent() {
                 }
             )
         }
+    ) { innerPadding ->
+        BookScreenContent(viewModel, innerPadding)
+    }
+}
+
+@Composable
+private fun BookScreenContent(viewModel: BooksViewModel, contentPadding: PaddingValues) {
+    val books by viewModel.books.collectAsState()
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(contentPadding)
+            .background(Color.Black),
+        contentAlignment = Alignment.Center,
     ) {
-        val books by viewModel.books.collectAsState()
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black),
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            if (books.isNotEmpty()) {
+                LazyColumn {
+                    items(books) { book ->
+                        BookListItem(book)
+                    }
+                }
+            } else {
                 Spacer(modifier = Modifier.weight(1f))
-
                 Text(
                     modifier = Modifier.padding(bottom = 32.dp)
-                        .padding(horizontal = 16.dp),
-                    text = "Books",
-                    fontSize = 24.sp,
+                        .padding(horizontal = 30.dp),
+                    text = "Nenhum livro adicionado ainda",
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                     textAlign = TextAlign.Center
                 )
-
                 Spacer(modifier = Modifier.weight(1f))
-
-                LazyColumn {
-                    items(books) { book ->
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            text = book.title.toString(),
-                            fontSize = 18.sp,
-                            color = Color.White
-                        )
-                    }
-                }
             }
+        }
+    }
+}
+
+@Composable
+private fun BookListItem(book: Book) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(16.dp)
+    ) {
+        AsyncImage(
+            modifier = Modifier.size(width = 80.dp, height = 120.dp),
+            model = book.imageUrl,
+            contentScale = ContentScale.Crop,
+            contentDescription = null
+        )
+        Spacer(Modifier.size(16.dp))
+        Column {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = book.title.toString(),
+                fontSize = 18.sp,
+                color = Color.Black,
+                style = TextStyle(fontWeight = FontWeight.Bold),
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 2
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = book.title.toString(),
+                fontSize = 14.sp,
+                color = Color.Black,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 4
+            )
         }
     }
 }

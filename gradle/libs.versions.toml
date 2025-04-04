@@ -21,6 +21,8 @@ sqlite = "2.5.0-rc03"
 ksp = "2.1.20-1.0.32"
 koin-bom = "4.0.0"
 lifecycle-viewmodel = "2.8.7"
+coil = "3.1.0"
+ktor = "3.1.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -59,6 +61,12 @@ koin-compose = { module = "io.insert-koin:koin-compose"}
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel"}
 
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle-viewmodel" }
+
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

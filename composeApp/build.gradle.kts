@@ -34,6 +34,12 @@ kotlin {
 
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+
+            implementation(libs.ktor.client.android)
+        }
+
+        appleMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
 
         commonMain.dependencies {
@@ -64,6 +70,9 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.lifecycle.viewmodel)
+
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
         }
     }
 }
