@@ -21,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.pucpr.app.libmangesys.koinViewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -50,8 +53,9 @@ fun BooksScreenPreview() {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun BooksScreenContent(viewModel: BooksViewModel = koinInject<BooksViewModel>()) {
+fun BooksScreenContent() {
     val navigator = LocalNavigator.current
+    val viewModel = koinViewModel<BooksViewModel>()
 
     Scaffold(
         topBar = {
@@ -73,6 +77,8 @@ fun BooksScreenContent(viewModel: BooksViewModel = koinInject<BooksViewModel>())
             )
         }
     ) {
+        val books by viewModel.books.collectAsState()
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -99,16 +105,16 @@ fun BooksScreenContent(viewModel: BooksViewModel = koinInject<BooksViewModel>())
                 Spacer(modifier = Modifier.weight(1f))
 
                 LazyColumn {
-//                    items(viewModel.getBooks().collectAsState(initial = emptyList()).value) { book ->
-//                        Text(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .padding(16.dp),
-//                            text = book.title.toString(),
-//                            fontSize = 18.sp,
-//                            color = Color.White
-//                        )
-//                    }
+                    items(books) { book ->
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            text = book.title.toString(),
+                            fontSize = 18.sp,
+                            color = Color.White
+                        )
+                    }
                 }
             }
         }

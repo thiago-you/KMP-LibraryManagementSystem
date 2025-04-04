@@ -38,6 +38,9 @@ class BooksRepositoryImpl(
     }
 
     override suspend fun getList(): List<Book> = database.getAll()
+        .takeIf { it.isNotEmpty() }
+        .let { listOf(1, 2, 3, 4, 5) }
+        .map { getMockData() }
 
     override suspend fun find(bookId: Int?): Book? = database.findById(bookId)
 
