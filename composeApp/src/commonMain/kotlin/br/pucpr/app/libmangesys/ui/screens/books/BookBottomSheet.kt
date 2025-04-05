@@ -52,6 +52,14 @@ fun BookBottomSheet(showBottomSheet: MutableState<Boolean>) {
     val isSaving by remember { derivedStateOf { viewmodel.isSaving } }
     val savedSuccessfully by remember { derivedStateOf { viewmodel.savedSuccessfully } }
 
+    val bookEdit by remember { derivedStateOf { viewmodel.bookEdit } }
+
+    if (bookEdit != null) {
+        title = bookEdit?.title ?: ""
+        description = bookEdit?.description ?: ""
+        imageUrl = bookEdit?.imageUrl ?: ""
+    }
+
     if (savedSuccessfully) {
         coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
             if (!sheetState.isVisible) {
@@ -112,8 +120,9 @@ fun BookBottomSheet(showBottomSheet: MutableState<Boolean>) {
                         return@Button
                     }
 
-                    viewmodel.saveBook(
+                    viewmodel.save(
                         book = Book(
+                            id = bookEdit?.id,
                             title = title,
                             description = description,
                             imageUrl = imageUrl
@@ -127,19 +136,24 @@ fun BookBottomSheet(showBottomSheet: MutableState<Boolean>) {
                     color = Color.White,
                 )
             }
-            Spacer(Modifier.size(16.dp))
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        if (isSaving) {
-                            return@clickable
-                        }
-                    },
-                textAlign = TextAlign.Center,
-                text = "Deletar",
-                color = Color.Black,
-            )
+
+            if (bookEdit != null) {
+                Spacer(Modifier.size(16.dp))
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            if (isSaving) {
+                                return@clickable
+                            }
+
+                            viewmodel.delete(bookEdit)
+                        },
+                    textAlign = TextAlign.Center,
+                    text = "Deletar",
+                    color = Color.Black,
+                )
+            }
         }
     }
 }

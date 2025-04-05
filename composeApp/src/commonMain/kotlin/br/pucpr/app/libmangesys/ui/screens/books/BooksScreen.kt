@@ -1,6 +1,7 @@
 package br.pucpr.app.libmangesys.ui.screens.books
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,6 +73,8 @@ fun BooksScreenContent() {
 
     val showBottomSheet = remember { mutableStateOf(false) }
 
+    val bookEdit by remember { derivedStateOf { viewModel.bookEdit } }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -106,7 +110,7 @@ fun BooksScreenContent() {
     ) { innerPadding ->
         BookScreenContent(viewModel, innerPadding)
 
-        if (showBottomSheet.value) {
+        if (showBottomSheet.value || bookEdit != null) {
             BookBottomSheet(showBottomSheet)
         }
     }
@@ -133,7 +137,7 @@ private fun BookScreenContent(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 items(books) { book ->
-                    BookListItem(book)
+                    BookListItem(book, viewModel)
                 }
                 item { Spacer(Modifier.size(96.dp)) }
             }
@@ -162,7 +166,10 @@ private fun BookScreenContent(
 }
 
 @Composable
-private fun BookListItem(book: Book) {
+private fun BookListItem(
+    book: Book,
+    viewModel: BooksViewModel,
+) {
     Row(
         modifier =
             Modifier
@@ -171,7 +178,10 @@ private fun BookListItem(book: Book) {
                 .background(
                     color = Color.White,
                     shape = RoundedCornerShape(12.dp),
-                ).padding(16.dp),
+                ).padding(16.dp)
+                .clickable {
+                    viewModel.edit(book)
+                },
     ) {
         AsyncImage(
             modifier = Modifier.size(width = 80.dp, height = 120.dp),

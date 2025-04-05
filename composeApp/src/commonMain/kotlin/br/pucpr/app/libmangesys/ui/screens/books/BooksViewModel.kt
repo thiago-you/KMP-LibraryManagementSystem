@@ -21,6 +21,9 @@ class BooksViewModel(
     private val _books = MutableStateFlow<List<Book>>(emptyList())
     val books = _books.asStateFlow()
 
+    var bookEdit by mutableStateOf<Book?>(null)
+        private set
+
     var isSaving by mutableStateOf(false)
         private set
 
@@ -35,14 +38,39 @@ class BooksViewModel(
 
     private suspend fun getBooks() = booksRepository.getList()
 
-    fun saveBook(book: Book) {
+    fun edit(book: Book) {
+        bookEdit = book
+    }
+
+    fun save(book: Book) {
         isSaving = true
 
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
-                booksRepository.insert(book)
+                if (book.id != null) {
+                    booksRepository.update(book)
+                } else {
+                    booksRepository.insert(book)
+                }
+
                 _books.value = getBooks()
 
+                bookEdit = null
+                savedSuccessfully = true
+                isSaving = false
+            }
+        }
+    }
+
+    fun delete(book: Book?) {
+        isSaving = true
+
+        viewModelScope.launch(Dispatchers.IO) {
+            runBlocking {
+                booksRepository.delete(book?.id)
+                _books.value = getBooks()
+
+                bookEdit = null
                 savedSuccessfully = true
                 isSaving = false
             }
