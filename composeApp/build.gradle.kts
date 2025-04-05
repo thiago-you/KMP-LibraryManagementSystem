@@ -51,6 +51,9 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
+            implementation(compose.uiTooling)
+            implementation(libs.androidx.compose.ui.tooling)
+
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.bottomSheetNavigator)
@@ -101,6 +104,10 @@ android {
         }
     }
 
+    buildFeatures {
+        compose = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -114,6 +121,7 @@ dependencies {
     add("kspIosArm64", libs.room.compiler)
 
     debugImplementation(compose.uiTooling)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
 
 room {
