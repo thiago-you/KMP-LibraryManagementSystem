@@ -29,7 +29,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -77,7 +76,7 @@ fun BooksScreenContent() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Books") },
+                title = { Text("Livros") },
                 colors =
                     TopAppBarDefaults.mediumTopAppBarColors(
                         containerColor = Color.Black,
@@ -105,9 +104,9 @@ fun BooksScreenContent() {
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Show Bottom Sheet")
             }
-        },
+        }
     ) { innerPadding ->
-        BookScreenContent(viewModel, innerPadding)
+        BooksList(viewModel, innerPadding)
 
         val isBottomSheetVisible = showBottomSheet.value || bookEdit != null
 
@@ -118,7 +117,7 @@ fun BooksScreenContent() {
 }
 
 @Composable
-private fun BookScreenContent(
+private fun BooksList(
     viewModel: BooksViewModel,
     contentPadding: PaddingValues,
 ) {
@@ -133,14 +132,17 @@ private fun BookScreenContent(
         contentAlignment = Alignment.Center,
     ) {
         if (books.isNotEmpty()) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                items(books) { book ->
-                    BookListItem(book, viewModel)
+            Column {
+                Spacer(Modifier.size(16.dp))
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    items(books) { book ->
+                        BookListItem(book, viewModel)
+                    }
+                    item { Spacer(Modifier.size(96.dp)) }
                 }
-                item { Spacer(Modifier.size(96.dp)) }
             }
         } else {
             Column(
@@ -153,7 +155,7 @@ private fun BookScreenContent(
                     modifier =
                         Modifier
                             .padding(bottom = 32.dp)
-                            .padding(horizontal = 30.dp),
+                            .padding(horizontal = 24.dp),
                     text = "Nenhum livro adicionado ainda",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,

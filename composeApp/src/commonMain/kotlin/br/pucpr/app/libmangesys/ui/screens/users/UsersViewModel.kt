@@ -1,12 +1,12 @@
-package br.pucpr.app.libmangesys.ui.screens.books
+package br.pucpr.app.libmangesys.ui.screens.users
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import br.pucpr.app.libmangesys.data.models.Book
-import br.pucpr.app.libmangesys.data.repositories.book.BooksRepository
+import br.pucpr.app.libmangesys.data.models.User
+import br.pucpr.app.libmangesys.data.repositories.user.UsersRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,13 +14,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class BooksViewModel(
-    private val repository: BooksRepository,
+class UsersViewModel(
+    private val repository: UsersRepository,
 ) : ViewModel() {
-    private val _books = MutableStateFlow<List<Book>>(emptyList())
-    val books = _books.asStateFlow()
+    private val _users = MutableStateFlow<List<User>>(emptyList())
+    val users = _users.asStateFlow()
 
-    var bookEdit by mutableStateOf<Book?>(null)
+    var userEdit by mutableStateOf<User?>(null)
         private set
 
     var isSaving by mutableStateOf(false)
@@ -31,60 +31,60 @@ class BooksViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            _books.value = getBooks()
+            _users.value = getUsers()
         }
     }
 
-    private suspend fun getBooks() = repository.getList()
+    private suspend fun getUsers() = repository.getList()
 
-    fun edit(book: Book) {
-        bookEdit = book
+    fun edit(user: User) {
+        userEdit = user
         isSaving = false
         savedSuccessfully = false
     }
 
-    fun clearBookEdit() {
-        bookEdit = null
+    fun clearUserEdit() {
+        userEdit = null
         isSaving = false
         savedSuccessfully = false
     }
 
-    fun getBookToSave(): Book? {
+    fun getUserToSave(): User? {
         isSaving = false
         savedSuccessfully = false
 
-        return bookEdit
+        return userEdit
     }
 
-    fun save(book: Book) {
+    fun save(user: User) {
         isSaving = true
 
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
-                if (book.id != null) {
-                    repository.update(book)
+                if (user.id != null) {
+                    repository.update(user)
                 } else {
-                    repository.insert(book)
+                    repository.insert(user)
                 }
 
-                _books.value = getBooks()
+                _users.value = getUsers()
 
-                bookEdit = null
+                userEdit = null
                 savedSuccessfully = true
                 isSaving = false
             }
         }
     }
 
-    fun delete(book: Book?) {
+    fun delete(user: User?) {
         isSaving = true
 
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
-                repository.delete(book?.id)
-                _books.value = getBooks()
+                repository.delete(user?.id)
+                _users.value = getUsers()
 
-                bookEdit = null
+                userEdit = null
                 savedSuccessfully = true
                 isSaving = false
             }
