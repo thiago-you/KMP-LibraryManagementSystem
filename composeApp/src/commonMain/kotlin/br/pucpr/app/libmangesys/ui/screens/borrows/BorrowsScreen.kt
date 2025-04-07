@@ -53,7 +53,7 @@ fun BorrowsScreenContent() {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Borrows") },
+                title = { Text("Empréstimos") },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = Color.Black,
                     titleContentColor = Color.White
@@ -85,9 +85,9 @@ fun BorrowsScreenContent() {
 
                 Text(
                     modifier = Modifier.padding(bottom = 32.dp)
-                        .padding(horizontal = 16.dp),
-                    text = "Borrows",
-                    fontSize = 24.sp,
+                        .padding(horizontal = 24.dp),
+                    text = "Nenhum empréstimo encontrado",
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
                     textAlign = TextAlign.Center
