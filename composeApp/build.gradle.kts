@@ -31,6 +31,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.lifecycle.runtime.compose)
 
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
@@ -49,20 +50,11 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-
-            implementation(compose.uiTooling)
-            implementation(libs.androidx.compose.ui.tooling)
 
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
-            implementation(libs.voyager.bottomSheetNavigator)
-            implementation(libs.voyager.tabNavigator)
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.koin)
-            implementation(libs.voyager.hilt)
-            implementation(libs.voyager.kodein)
-            implementation(libs.voyager.rxjava)
 
             implementation(libs.room.gradle)
             implementation(libs.room.runtime)
@@ -119,9 +111,6 @@ dependencies {
     add("kspIosSimulatorArm64", libs.room.compiler)
     add("kspIosX64", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)
-
-    debugImplementation(compose.uiTooling)
-    debugImplementation(libs.androidx.compose.ui.tooling)
 }
 
 room {
