@@ -72,8 +72,7 @@ fun BooksScreenContent() {
     val viewModel = koinViewModel<BooksViewModel>()
 
     val showBottomSheet = remember { mutableStateOf(false) }
-
-    val bookEdit by remember { derivedStateOf { viewModel.bookEdit } }
+    val bookEdit = viewModel.bookEdit
 
     Scaffold(
         topBar = {
@@ -110,7 +109,9 @@ fun BooksScreenContent() {
     ) { innerPadding ->
         BookScreenContent(viewModel, innerPadding)
 
-        if (showBottomSheet.value || bookEdit != null) {
+        val isBottomSheetVisible = showBottomSheet.value || bookEdit != null
+
+        if (isBottomSheetVisible) {
             BookBottomSheet(showBottomSheet)
         }
     }

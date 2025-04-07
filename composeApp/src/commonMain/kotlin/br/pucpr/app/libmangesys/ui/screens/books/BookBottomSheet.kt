@@ -45,25 +45,26 @@ fun BookBottomSheet(showBottomSheet: MutableState<Boolean>) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
 
+    val isSaving = viewmodel.isSaving
+    val savedSuccessfully = viewmodel.savedSuccessfully
+
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var imageUrl by remember { mutableStateOf("") }
 
-    val isSaving by remember { derivedStateOf { viewmodel.isSaving } }
-    val savedSuccessfully by remember { derivedStateOf { viewmodel.savedSuccessfully } }
-
     val bookEdit by remember { derivedStateOf { viewmodel.bookEdit } }
 
-    if (bookEdit != null) {
-        title = bookEdit?.title ?: ""
-        description = bookEdit?.description ?: ""
-        imageUrl = bookEdit?.imageUrl ?: ""
+    viewmodel.getBookToSave().also { book ->
+        title = book?.title ?: ""
+        description = book?.description ?: ""
+        imageUrl = book?.imageUrl ?: ""
     }
 
     if (savedSuccessfully) {
         coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
             if (!sheetState.isVisible) {
                 showBottomSheet.value = false
+                viewmodel.clearBookEdit()
             }
         }
     }
@@ -71,6 +72,7 @@ fun BookBottomSheet(showBottomSheet: MutableState<Boolean>) {
     ModalBottomSheet(
         onDismissRequest = {
             showBottomSheet.value = false
+            viewmodel.clearBookEdit()
         },
         sheetState = sheetState,
     ) {

@@ -15,9 +15,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class BooksViewModel(
-    private val booksRepository: BooksRepository
+    private val booksRepository: BooksRepository,
 ) : ViewModel() {
-
     private val _books = MutableStateFlow<List<Book>>(emptyList())
     val books = _books.asStateFlow()
 
@@ -40,6 +39,21 @@ class BooksViewModel(
 
     fun edit(book: Book) {
         bookEdit = book
+        isSaving = false
+        savedSuccessfully = false
+    }
+
+    fun clearBookEdit() {
+        bookEdit = null
+        isSaving = false
+        savedSuccessfully = false
+    }
+
+    fun getBookToSave(): Book? {
+        isSaving = false
+        savedSuccessfully = false
+
+        return bookEdit
     }
 
     fun save(book: Book) {
