@@ -9,20 +9,20 @@ import br.pucpr.app.libmangesys.data.models.Book
 @Dao
 interface BookDao {
     @Query("SELECT * FROM book")
-    fun getAll(): List<Book>
+    suspend fun getAll(): List<Book>
 
     @Insert
-    fun insert(book: Book)
+    suspend fun insert(book: Book)
 
     @Update
-    fun update(book: Book)
+    suspend fun update(book: Book)
 
     @Query("SELECT * FROM book WHERE id = :bookId")
-    fun findById(bookId: Int?): Book?
+    suspend fun findById(bookId: Int?): Book?
 
     @Query("DELETE FROM book WHERE id = :bookId")
-    fun deleteById(bookId: Int?)
+    suspend fun deleteById(bookId: Int?)
 
     @Query("DELETE FROM book")
-    fun truncate()
+    suspend fun truncate()
 }

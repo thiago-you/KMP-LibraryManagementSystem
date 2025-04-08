@@ -9,20 +9,20 @@ import br.pucpr.app.libmangesys.data.models.User
 @Dao
 interface UserDao {
     @Query("SELECT * FROM user")
-    fun getAll(): List<User>
+    suspend fun getAll(): List<User>
 
     @Insert
-    fun insert(user: User)
+    suspend fun insert(user: User)
 
     @Update
-    fun update(user: User)
+    suspend fun update(user: User)
 
     @Query("SELECT * FROM user WHERE id = :userId")
-    fun findById(userId: Int?): User?
+    suspend fun findById(userId: Int?): User?
 
     @Query("DELETE FROM user WHERE id = :userId")
-    fun deleteById(userId: Int?)
+    suspend fun deleteById(userId: Int?)
 
     @Query("DELETE FROM user")
-    fun truncate()
+    suspend fun truncate()
 }

@@ -33,6 +33,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.lifecycle.runtime.compose)
 
+            implementation(libs.room.gradle)
+
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
 
@@ -56,9 +58,11 @@ kotlin {
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.koin)
 
-            implementation(libs.room.gradle)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+
             implementation(libs.room.runtime)
-            implementation(libs.room.sqlite)
+            implementation(libs.sqlite.bundled)
 
             implementation(project.dependencies.platform(libs.koin.bom))
             api(libs.koin.core)
