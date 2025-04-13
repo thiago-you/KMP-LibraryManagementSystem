@@ -29,6 +29,9 @@ class UsersViewModel(
     var savedSuccessfully by mutableStateOf(false)
         private set
 
+    var deleteError by mutableStateOf<Boolean?>(null)
+        private set
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             _users.value = getUsers()
@@ -81,11 +84,13 @@ class UsersViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
-                repository.delete(user?.id)
+                deleteError = repository.delete(user?.id) == false
+
                 _users.value = getUsers()
 
                 userEdit = null
                 savedSuccessfully = true
+
                 isSaving = false
             }
         }

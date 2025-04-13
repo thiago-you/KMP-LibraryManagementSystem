@@ -24,6 +24,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -43,6 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.pucpr.app.libmangesys.data.models.Book
+import br.pucpr.app.libmangesys.ui.screens.users.SnackbarCustom
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import coil3.compose.AsyncImage
@@ -71,9 +75,15 @@ fun BooksScreenContent() {
     val viewModel = koinViewModel<BooksViewModel>()
 
     val showBottomSheet = remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val bookEdit = viewModel.bookEdit
+    val deleteError = viewModel.deleteError
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
         topBar = {
             TopAppBar(
                 title = { Text("Livros") },
@@ -112,6 +122,12 @@ fun BooksScreenContent() {
 
         if (isBottomSheetVisible) {
             BookBottomSheet(showBottomSheet)
+        }
+        if (deleteError == true) {
+            SnackbarCustom(
+                snackbarHostState = snackbarHostState,
+                message =  "Não é possível deletar livros com empréstimos registrados"
+            )
         }
     }
 }

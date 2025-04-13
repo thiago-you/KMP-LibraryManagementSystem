@@ -23,6 +23,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -31,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import br.pucpr.app.libmangesys.data.models.User
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -68,9 +72,16 @@ fun UsersScreenContent() {
     val viewModel = koinViewModel<UsersViewModel>()
 
     val showBottomSheet = remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val userEdit = viewModel.userEdit
 
+    val deleteError = viewModel.deleteError
+
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
         topBar = {
             TopAppBar(
                 title = { Text("Usuários") },
@@ -109,6 +120,12 @@ fun UsersScreenContent() {
 
         if (isBottomSheetVisible) {
             UserBottomSheet(showBottomSheet)
+        }
+        if (deleteError == true) {
+            SnackbarCustom(
+                snackbarHostState = snackbarHostState,
+                message = "Não é possível deletar usuários com empréstimos registrados"
+            )
         }
     }
 }
@@ -198,7 +215,19 @@ private fun UserListItem(
             fontSize = 18.sp,
             color = Color.Black,
             overflow = TextOverflow.Ellipsis,
-            maxLines = 1
+            maxLines = 1,
         )
+    }
+}
+
+@Composable
+fun SnackbarCustom(
+    snackbarHostState: SnackbarHostState,
+    message: String,
+) {
+    val coroutineScope = rememberCoroutineScope()
+
+    coroutineScope.launch {
+        snackbarHostState.showSnackbar(message = message)
     }
 }

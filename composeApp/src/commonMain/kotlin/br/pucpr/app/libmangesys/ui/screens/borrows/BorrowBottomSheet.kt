@@ -45,26 +45,26 @@ fun BorrowBottomSheetPreview() {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun BorrowBottomSheet(showBottomSheet: MutableState<Boolean>) {
-    val viewmodel = koinViewModel<BorrowsViewModel>()
+    val viewModel = koinViewModel<BorrowsViewModel>()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
 
-    val users by viewmodel.users.collectAsState()
-    val books by viewmodel.books.collectAsState()
+    val users by viewModel.users.collectAsState()
+    val books by viewModel.books.collectAsState()
 
     val usersData = users.takeIf { it.isNotEmpty() }?.map { it.name ?: "" } ?: listOf()
     val booksData = books.takeIf { it.isNotEmpty() }?.map { it.title ?: "" } ?: listOf()
 
-    val isSaving = viewmodel.isSaving
-    val savedSuccessfully = viewmodel.savedSuccessfully
+    val isSaving = viewModel.isSaving
+    val savedSuccessfully = viewModel.savedSuccessfully
 
-    val borrowEdit by remember { derivedStateOf { viewmodel.borrowEdit } }
+    val borrowEdit by remember { derivedStateOf { viewModel.borrowEdit } }
 
     val selectedUserOption = remember { mutableStateOf("") }
     val selectedBookOption = remember { mutableStateOf("") }
 
-    viewmodel.getBorrowToSave().also { borrow ->
+    viewModel.getBorrowToSave().also { borrow ->
         selectedBookOption.value = books.find { it.id == borrow?.bookId }?.title ?: ""
         selectedUserOption.value = users.find { it.id == borrow?.userId }?.name ?: ""
     }
@@ -73,7 +73,7 @@ fun BorrowBottomSheet(showBottomSheet: MutableState<Boolean>) {
         coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
             if (!sheetState.isVisible) {
                 showBottomSheet.value = false
-                viewmodel.clearBorrowEdit()
+                viewModel.clearBorrowEdit()
             }
         }
     }
@@ -81,7 +81,7 @@ fun BorrowBottomSheet(showBottomSheet: MutableState<Boolean>) {
     ModalBottomSheet(
         onDismissRequest = {
             showBottomSheet.value = false
-            viewmodel.clearBorrowEdit()
+            viewModel.clearBorrowEdit()
         },
         sheetState = sheetState,
     ) {
@@ -119,7 +119,7 @@ fun BorrowBottomSheet(showBottomSheet: MutableState<Boolean>) {
                     val userId = users.find { it.name == selectedUserOption.value }?.id
                     val bookId = books.find { it.title == selectedBookOption.value }?.id
 
-                    viewmodel.save(
+                    viewModel.save(
                         borrow = Borrow(
                             id = borrowEdit?.id,
                             bookId = bookId,
@@ -140,13 +140,17 @@ fun BorrowBottomSheet(showBottomSheet: MutableState<Boolean>) {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            if (isSaving) {
-                                return@clickable
-                            }
+                        .clickable(
+                            indication = null,
+                            interactionSource = null,
+                            onClick = {
+                                if (isSaving) {
+                                    return@clickable
+                                }
 
-                            viewmodel.delete(borrowEdit)
-                        },
+                                viewModel.delete(borrowEdit)
+                            }
+                        ),
                     textAlign = TextAlign.Center,
                     text = "Deletar",
                     color = Color.Black,

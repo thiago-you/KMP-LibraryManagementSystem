@@ -29,6 +29,9 @@ class BooksViewModel(
     var savedSuccessfully by mutableStateOf(false)
         private set
 
+    var deleteError by mutableStateOf<Boolean?>(null)
+        private set
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             _books.value = getBooks()
@@ -81,7 +84,8 @@ class BooksViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             runBlocking {
-                repository.delete(book?.id)
+                deleteError = repository.delete(book?.id) == false
+
                 _books.value = getBooks()
 
                 bookEdit = null

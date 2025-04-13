@@ -40,20 +40,20 @@ fun UserBottomSheetPreview() {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun UserBottomSheet(showBottomSheet: MutableState<Boolean>) {
-    val viewmodel = koinViewModel<UsersViewModel>()
+    val viewModel = koinViewModel<UsersViewModel>()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
 
-    val isSaving = viewmodel.isSaving
-    val savedSuccessfully = viewmodel.savedSuccessfully
+    val isSaving = viewModel.isSaving
+    val savedSuccessfully = viewModel.savedSuccessfully
 
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
 
-    val userEdit by remember { derivedStateOf { viewmodel.userEdit } }
+    val userEdit by remember { derivedStateOf { viewModel.userEdit } }
 
-    viewmodel.getUserToSave().also { user ->
+    viewModel.getUserToSave().also { user ->
         name = user?.name ?: ""
         surname = user?.surname ?: ""
     }
@@ -62,7 +62,7 @@ fun UserBottomSheet(showBottomSheet: MutableState<Boolean>) {
         coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
             if (!sheetState.isVisible) {
                 showBottomSheet.value = false
-                viewmodel.clearUserEdit()
+                viewModel.clearUserEdit()
             }
         }
     }
@@ -70,7 +70,7 @@ fun UserBottomSheet(showBottomSheet: MutableState<Boolean>) {
     ModalBottomSheet(
         onDismissRequest = {
             showBottomSheet.value = false
-            viewmodel.clearUserEdit()
+            viewModel.clearUserEdit()
         },
         sheetState = sheetState,
     ) {
@@ -111,7 +111,7 @@ fun UserBottomSheet(showBottomSheet: MutableState<Boolean>) {
                         return@Button
                     }
 
-                    viewmodel.save(
+                    viewModel.save(
                         user = User(
                             id = userEdit?.id,
                             name = name,
@@ -132,13 +132,17 @@ fun UserBottomSheet(showBottomSheet: MutableState<Boolean>) {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            if (isSaving) {
-                                return@clickable
-                            }
+                        .clickable(
+                            interactionSource = null,
+                            indication = null,
+                            onClick = {
+                                if (isSaving) {
+                                    return@clickable
+                                }
 
-                            viewmodel.delete(userEdit)
-                        },
+                                viewModel.delete(userEdit)
+                            }
+                        ),
                     textAlign = TextAlign.Center,
                     text = "Deletar",
                     color = Color.Black,
