@@ -1,6 +1,6 @@
 package br.pucpr.app.libmangesys.ui.screens.borrows
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -79,7 +81,7 @@ fun BorrowsScreenContent() {
                 title = { Text("Empréstimos") },
                 colors =
                     TopAppBarDefaults.mediumTopAppBarColors(
-                        containerColor = Color.Black,
+                        containerColor = Color(0xFF1f1d2b),
                         titleContentColor = Color.White,
                     ),
                 navigationIcon = {
@@ -98,13 +100,15 @@ fun BorrowsScreenContent() {
                 onClick = {
                     showBottomSheet.value = true
                 },
-                containerColor = Color.Green,
+                containerColor = Color(0xFF49ab6c),
                 contentColor = Color.White,
                 modifier = Modifier.padding(16.dp),
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Show Bottom Sheet")
             }
         },
+        containerColor = Color(0xFF1f1d2b),
+        contentColor = Color.White
     ) { innerPadding ->
         BorrowsList(viewModel, innerPadding)
 
@@ -127,8 +131,7 @@ fun BorrowsList(
         modifier =
             Modifier
                 .fillMaxSize()
-                .padding(contentPadding)
-                .background(Color.Black),
+                .padding(contentPadding),
         contentAlignment = Alignment.Center,
     ) {
         if (borrows.isNotEmpty()) {
@@ -179,62 +182,70 @@ private fun BorrowListItem(
     val book = borrowWithDetails.book
     val user = borrowWithDetails.user
 
-    Row(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .background(
-                    color = Color.White,
-                    shape = RoundedCornerShape(12.dp),
-                ).padding(16.dp)
-                .clickable {
-                    viewModel.edit(borrow)
-                },
-    ) {
-        AsyncImage(
-            modifier = Modifier.size(width = 80.dp, height = 120.dp),
-            model = book?.imageUrl,
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        shape = RoundedCornerShape(8.dp),
+        border = BorderStroke(2.dp, Color(0xFF332f3f)),
+        colors = CardDefaults.cardColors(
+            containerColor = Color(0xFF382e57),
+            contentColor = Color.White
         )
-        Spacer(Modifier.size(16.dp))
-        Column {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Usuário",
-                fontSize = 12.sp,
-                color = Color.Black,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = user?.name ?: "",
-                fontSize = 18.sp,
-                color = Color.Black,
-                style = TextStyle(fontWeight = FontWeight.Bold),
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 2,
+    ) {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .clickable {
+                        viewModel.edit(borrow)
+                    },
+        ) {
+            AsyncImage(
+                modifier = Modifier.size(width = 80.dp, height = 120.dp),
+                model = book?.imageUrl,
+                contentScale = ContentScale.Crop,
+                contentDescription = null,
             )
             Spacer(Modifier.size(16.dp))
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Livro",
-                fontSize = 12.sp,
-                color = Color.Black,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = book?.title ?: "",
-                fontSize = 18.sp,
-                color = Color.Black,
-                style = TextStyle(fontWeight = FontWeight.Bold),
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 2,
-            )
+            Column {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Usuário",
+                    fontSize = 12.sp,
+                    color = Color.White,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = user?.name ?: "",
+                    fontSize = 18.sp,
+                    color = Color.White,
+                    style = TextStyle(fontWeight = FontWeight.Bold),
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2,
+                )
+                Spacer(Modifier.size(16.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Livro",
+                    fontSize = 12.sp,
+                    color = Color.White,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = book?.title ?: "",
+                    fontSize = 18.sp,
+                    color = Color.White,
+                    style = TextStyle(fontWeight = FontWeight.Bold),
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2,
+                )
+            }
         }
     }
 }

@@ -108,7 +108,7 @@ fun BorrowBottomSheet(showBottomSheet: MutableState<Boolean>) {
                 modifier = Modifier.fillMaxWidth(),
                 colors =
                     ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
+                        containerColor = Color(0xFF49ab6c),
                         contentColor = Color.White,
                     ),
                 onClick = {
