@@ -30,8 +30,8 @@ fun initKoin(config: KoinAppDeclaration? = null) =
         config?.invoke(this)
         modules(
             platformModule(),
-            provideRepositoryModule,
-            provideDatabaseModule
+            provideDatabaseModule,
+            provideRepositoryModule
         )
     }
 
@@ -42,7 +42,6 @@ val provideRepositoryModule = module {
 }
 
 val provideDatabaseModule = module {
-    single { getRoomDatabase(get()) }
     single { getBookDao(get()) }
     single { getUserDao(get()) }
     single { getBorrowDao(get()) }

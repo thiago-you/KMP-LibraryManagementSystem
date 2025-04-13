@@ -4,17 +4,14 @@ import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
-import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import br.pucpr.app.libmangesys.data.models.Book
 import br.pucpr.app.libmangesys.data.models.Borrow
 import br.pucpr.app.libmangesys.data.models.User
 import br.pucpr.app.libmangesys.data.repositories.book.BookDao
 import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowDao
 import br.pucpr.app.libmangesys.data.repositories.user.UserDao
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 
-@Database(version = 1, exportSchema = false, entities = [Book::class, User::class, Borrow::class])
+@Database(version = 2, exportSchema = false, entities = [Book::class, User::class, Borrow::class])
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getBookDao(): BookDao
@@ -28,13 +25,6 @@ abstract class AppDatabase : RoomDatabase() {
 expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
     override fun initialize(): AppDatabase
 }
-
-fun getRoomDatabase(builder: RoomDatabase.Builder<AppDatabase>): AppDatabase = builder
-    .addMigrations()
-    .fallbackToDestructiveMigrationOnDowngrade(true)
-    .setDriver(BundledSQLiteDriver())
-    .setQueryCoroutineContext(Dispatchers.IO)
-    .build()
 
 fun getBookDao(appDatabase: AppDatabase) = appDatabase.getBookDao()
 
