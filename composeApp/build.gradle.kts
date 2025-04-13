@@ -58,9 +58,6 @@ kotlin {
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.koin)
 
-            implementation(project.dependencies.platform(libs.koin.bom))
-            implementation(libs.koin.core)
-
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
 
