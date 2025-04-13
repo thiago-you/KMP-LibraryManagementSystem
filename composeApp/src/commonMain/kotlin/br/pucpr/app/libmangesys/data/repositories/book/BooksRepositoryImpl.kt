@@ -38,7 +38,7 @@ class BooksRepositoryImpl(
     }
 
     override suspend fun getList(): List<Book> = database.getAll()
-        .takeIf { it.isNotEmpty() } ?: listOf(1, 2, 3, 4, 5).map { getMockData() }
+        .takeIf { it.isNotEmpty() } ?: listOf(1, 2, 3, 4, 5).map { getMockData(it) }
 
     override suspend fun find(bookId: Int?): Book? = database.findById(bookId)
 
@@ -71,10 +71,11 @@ class BooksRepositoryImpl(
         return true
     }
 
-    override suspend fun getMockData(): Book {
+    override suspend fun getMockData(mockIndex: Int): Book {
         val mockPosition = Random.nextInt(0, mockTitles.size - 1)
 
         return Book(
+            id = mockIndex,
             title = mockTitles[mockPosition],
             description = mockDescriptions[mockPosition],
             imageUrl = mockImages[mockPosition]

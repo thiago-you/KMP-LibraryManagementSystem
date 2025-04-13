@@ -6,7 +6,6 @@ import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowsRepository
 import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowsRepositoryImpl
 import br.pucpr.app.libmangesys.data.repositories.getBookDao
 import br.pucpr.app.libmangesys.data.repositories.getBorrowDao
-import br.pucpr.app.libmangesys.data.repositories.getRoomDatabase
 import br.pucpr.app.libmangesys.data.repositories.getUserDao
 import br.pucpr.app.libmangesys.data.repositories.user.UsersRepository
 import br.pucpr.app.libmangesys.data.repositories.user.UsersRepositoryImpl

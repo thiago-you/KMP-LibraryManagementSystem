@@ -11,7 +11,7 @@ import br.pucpr.app.libmangesys.data.repositories.book.BookDao
 import br.pucpr.app.libmangesys.data.repositories.borrow.BorrowDao
 import br.pucpr.app.libmangesys.data.repositories.user.UserDao
 
-@Database(version = 2, exportSchema = false, entities = [Book::class, User::class, Borrow::class])
+@Database(version = 1, exportSchema = false, entities = [Book::class, User::class, Borrow::class])
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getBookDao(): BookDao
