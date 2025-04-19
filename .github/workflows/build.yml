@@ -34,11 +34,11 @@ jobs:
 
 #      - run: xcodebuild -version
 
-      - name: Install CocoaPods
-        run: |
-          gem install cocoapods
-          pod install
-          pod setup
+#      - name: Install CocoaPods
+#        run: |
+#          gem install cocoapods
+#          pod install
+#          pod setup
 
       - name: Build and Analyze
         run: |
