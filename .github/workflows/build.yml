@@ -19,7 +19,6 @@ jobs:
         uses: mobiledevops/xcode-select-version-action@v1
         with:
           xcode-select-version: 15.4
-      - run: cd iosApp
       - run: xcodebuild -version
 
     #      - name: Xcode Select Version
@@ -42,5 +41,6 @@ jobs:
 
       - name: Build and Analyze
         run: |
+          cd iosApp
           xcodebuild -version
           xcodebuild build -workspace iosApp.xcodeproj/project.xcworkspace -scheme iosApp -destination "OS=16.4,name=iPhone 14" -configuration Debug
