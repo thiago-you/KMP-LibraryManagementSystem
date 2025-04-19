@@ -10,7 +10,6 @@ fun getDatabaseBuilder(): AppDatabase {
 
     return Room.databaseBuilder<AppDatabase>(
         name = dbFilePath,
-        factory = { AppDatabase::class.instantiateImpl() }
     )
         .setDriver(BundledSQLiteDriver())
         .build()
