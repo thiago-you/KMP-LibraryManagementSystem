@@ -9,5 +9,5 @@ interface BooksRepository  {
     suspend fun update(book: Book)
     suspend fun delete(bookId: Int?): Boolean
     suspend fun find(bookId: Int?): Book?
-    suspend fun getMockData(): Book
+    suspend fun getMockData(mockIndex: Int): Book
 }

@@ -13,7 +13,7 @@ class AndroidPlatform : Platform {
 actual fun getPlatform(): Platform = AndroidPlatform()
 
 actual fun platformModule() = module {
-    single<RoomDatabase.Builder<AppDatabase>> {
+    single<AppDatabase> {
         getDatabaseBuilder(get())
     }
 }

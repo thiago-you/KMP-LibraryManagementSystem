@@ -1,6 +1,5 @@
 package br.pucpr.app.libmangesys
 
-import androidx.room.RoomDatabase
 import br.pucpr.app.libmangesys.data.repositories.AppDatabase
 import br.pucpr.app.libmangesys.database.getDatabaseBuilder
 import org.koin.dsl.module
@@ -13,7 +12,7 @@ class IOSPlatform: Platform {
 actual fun getPlatform(): Platform = IOSPlatform()
 
 actual fun platformModule() = module {
-    single<RoomDatabase.Builder<AppDatabase>> {
+    single<AppDatabase> {
         getDatabaseBuilder()
     }
 }

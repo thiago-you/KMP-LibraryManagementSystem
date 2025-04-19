@@ -26,9 +26,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import br.pucpr.app.libmangesys.data.models.Book
-import br.pucpr.app.libmangesys.koinViewModel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
 @Preview
 @Composable
@@ -40,21 +40,21 @@ fun BookBottomSheetPreview() {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun BookBottomSheet(showBottomSheet: MutableState<Boolean>) {
-    val viewmodel = koinViewModel<BooksViewModel>()
+    val viewModel = koinViewModel<BooksViewModel>()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val coroutineScope = rememberCoroutineScope()
 
-    val isSaving = viewmodel.isSaving
-    val savedSuccessfully = viewmodel.savedSuccessfully
+    val isSaving = viewModel.isSaving
+    val savedSuccessfully = viewModel.savedSuccessfully
 
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var imageUrl by remember { mutableStateOf("") }
 
-    val bookEdit by remember { derivedStateOf { viewmodel.bookEdit } }
+    val bookEdit by remember { derivedStateOf { viewModel.bookEdit } }
 
-    viewmodel.getBookToSave().also { book ->
+    viewModel.getBookToSave().also { book ->
         title = book?.title ?: ""
         description = book?.description ?: ""
         imageUrl = book?.imageUrl ?: ""
@@ -64,7 +64,7 @@ fun BookBottomSheet(showBottomSheet: MutableState<Boolean>) {
         coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
             if (!sheetState.isVisible) {
                 showBottomSheet.value = false
-                viewmodel.clearBookEdit()
+                viewModel.clearBookEdit()
             }
         }
     }
@@ -72,7 +72,7 @@ fun BookBottomSheet(showBottomSheet: MutableState<Boolean>) {
     ModalBottomSheet(
         onDismissRequest = {
             showBottomSheet.value = false
-            viewmodel.clearBookEdit()
+            viewModel.clearBookEdit()
         },
         sheetState = sheetState,
     ) {
@@ -114,7 +114,7 @@ fun BookBottomSheet(showBottomSheet: MutableState<Boolean>) {
                 modifier = Modifier.fillMaxWidth(),
                 colors =
                     ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
+                        containerColor = Color(0xFF49ab6c),
                         contentColor = Color.White,
                     ),
                 onClick = {
@@ -122,7 +122,7 @@ fun BookBottomSheet(showBottomSheet: MutableState<Boolean>) {
                         return@Button
                     }
 
-                    viewmodel.save(
+                    viewModel.save(
                         book = Book(
                             id = bookEdit?.id,
                             title = title,
@@ -144,13 +144,17 @@ fun BookBottomSheet(showBottomSheet: MutableState<Boolean>) {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            if (isSaving) {
-                                return@clickable
-                            }
+                        .clickable(
+                            indication = null,
+                            interactionSource = null,
+                            onClick = {
+                                if (isSaving) {
+                                    return@clickable
+                                }
 
-                            viewmodel.delete(bookEdit)
-                        },
+                                viewModel.delete(bookEdit)
+                            }
+                        ),
                     textAlign = TextAlign.Center,
                     text = "Deletar",
                     color = Color.Black,

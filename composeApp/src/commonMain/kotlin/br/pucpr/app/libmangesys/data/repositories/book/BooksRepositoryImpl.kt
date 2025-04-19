@@ -9,6 +9,10 @@ class BooksRepositoryImpl(
     private var borrowsRepository: BorrowsRepository
 ): BooksRepository {
 
+    companion object {
+        private var mocks: MutableList<Book>? = null
+    }
+
     private val mockTitles = listOf(
         "The Great Gatsby",
         "To Kill a Mockingbird",
@@ -37,8 +41,17 @@ class BooksRepositoryImpl(
         database.truncate()
     }
 
-    override suspend fun getList(): List<Book> = database.getAll()
-        .takeIf { it.isNotEmpty() } ?: listOf(1, 2, 3, 4, 5).map { getMockData() }
+    override suspend fun getList(): List<Book> {
+        val list = database.getAll().toMutableList()
+
+        if (mocks == null) {
+            mocks = listOf(1, 2, 3, 4, 5).map { getMockData(it) }.toMutableList()
+        }
+
+        list.addAll(mocks.orEmpty())
+
+        return list.takeIf { it.isNotEmpty() } ?: emptyList()
+    }
 
     override suspend fun find(bookId: Int?): Book? = database.findById(bookId)
 
@@ -66,15 +79,20 @@ class BooksRepositoryImpl(
             return false
         }
 
+        if (mocks?.any { it.id == bookId } == true) {
+            mocks?.removeAll { it.id == bookId }
+        }
+
         database.deleteById(bookId)
 
         return true
     }
 
-    override suspend fun getMockData(): Book {
+    override suspend fun getMockData(mockIndex: Int): Book {
         val mockPosition = Random.nextInt(0, mockTitles.size - 1)
 
         return Book(
+            id = mockIndex,
             title = mockTitles[mockPosition],
             description = mockDescriptions[mockPosition],
             imageUrl = mockImages[mockPosition]

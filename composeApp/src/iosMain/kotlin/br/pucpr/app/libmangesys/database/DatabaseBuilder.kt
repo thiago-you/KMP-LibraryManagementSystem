@@ -1,30 +1,17 @@
 package br.pucpr.app.libmangesys.database
 
 import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import br.pucpr.app.libmangesys.data.repositories.AppDatabase
-import kotlinx.cinterop.ExperimentalForeignApi
-import platform.Foundation.NSDocumentDirectory
-import platform.Foundation.NSFileManager
-import platform.Foundation.NSUserDomainMask
+import platform.Foundation.NSHomeDirectory
 
-fun getDatabaseBuilder(): RoomDatabase.Builder<AppDatabase> {
-    val dbFilePath = documentDirectory() + "/lib_manage_sys.db"
+fun getDatabaseBuilder(): AppDatabase {
+    val dbFilePath = NSHomeDirectory() + "/lib_manage_sys.db"
 
     return Room.databaseBuilder<AppDatabase>(
         name = dbFilePath,
+        factory = { AppDatabase::class.instantiateImpl() }
     )
-}
-
-@OptIn(ExperimentalForeignApi::class)
-private fun documentDirectory(): String {
-    val documentDirectory = NSFileManager.defaultManager.URLForDirectory(
-        directory = NSDocumentDirectory,
-        inDomain = NSUserDomainMask,
-        appropriateForURL = null,
-        create = false,
-        error = null,
-    )
-
-    return requireNotNull(documentDirectory?.path)
+        .setDriver(BundledSQLiteDriver())
+        .build()
 }
