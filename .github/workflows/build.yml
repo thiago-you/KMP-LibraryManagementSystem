@@ -14,10 +14,10 @@ jobs:
         with:
           fetch-depth: 1
 
-       - name: Xcode Select Version
-         uses: mobiledevops/xcode-select-version-action@v1
-         with:
-           xcode-select-version: '14.2'
+      - name: Xcode Select Version
+        uses: mobiledevops/xcode-select-version-action@v1
+        with:
+          xcode-select-version: '14.2'
 
 #      - name: Select latest Xcode
 #        uses: maxim-lobanov/setup-xcode@v1
